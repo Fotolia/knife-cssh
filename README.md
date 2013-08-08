@@ -8,7 +8,7 @@ It's easy as pie :
 
 cssh all the machines with the postgresql recipe ?
 
-```knife cssh summon recipes:postgresl```
+```knife cssh summon recipes:postgresql```
 
 cssh ALL THE THINGS !!!
 
@@ -18,4 +18,4 @@ cssh ALL THE THINGS !!!
 Author
 ------
 
-Nicolas Szalay <nico meh fotolia meh com>
+Nicolas Szalay : < nicolas.szalay _at_ fotolia _dot_ com >
