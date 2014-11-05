@@ -5,12 +5,6 @@ module KnifeCssh
 
     banner "knife cssh summon QUERY"
 
-    option :debug,
-      :short => '-d',
-      :long  => '--debug',
-      :description => "turn debug on",
-      :default => false
-
     deps do
       require 'chef/node'
       require 'chef/environment'
