@@ -14,6 +14,9 @@ cssh ALL THE THINGS !!!
 
 ```knife cssh summon fqdn:*```
 
+License
+-------
+3 clauses BSD
 
 Author
 ------
