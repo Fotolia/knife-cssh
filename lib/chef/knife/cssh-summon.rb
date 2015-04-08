@@ -5,11 +5,18 @@ module KnifeCssh
 
     banner "knife cssh summon QUERY"
 
+    option :login,
+      :short => '-l USER',
+      :long => '--login USER',
+      :description => 'Username to use for login',
+      :default => 'root'
+
     deps do
       require 'chef/node'
       require 'chef/environment'
       require 'chef/api_client'
       require 'chef/knife/search'
+      require 'shellwords'
     end
 
     def run
@@ -30,7 +37,7 @@ module KnifeCssh
         exit 1
       end
 
-      %x[cssh #{result_items.join(" ")}]
+      %x[cssh -l #{config[:login].shellescape} #{result_items.join(" ")}]
     end
 
     private
