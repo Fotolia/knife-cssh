@@ -21,7 +21,8 @@ module KnifeCssh
 
       begin
         q.search('node', escaped_query, 'X_CHEF_id_CHEF_X asc', 0, 100) do |item|
-          result_items.push(item["fqdn"]) if item.has_key?("fqdn")
+          remote_host = extract_host item
+          result_items.push remote_host if not remote_host.nil?
         end
       rescue Net::HTTPServerException => e
         msg = Chef::JSONCompat.from_json(e.response.body)["error"].first
@@ -30,6 +31,14 @@ module KnifeCssh
       end
 
       %x[cssh #{result_items.join(" ")}]
+    end
+
+    private
+
+    def extract_host(item)
+      return item[:ec2][:public_ipv4] if item.has_key? :ec2
+      return item[:ipaddress] if not item[:ipaddress].nil?
+      item[:fqdn]
     end
   end
 end
