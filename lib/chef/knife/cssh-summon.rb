@@ -1,6 +1,22 @@
 require 'chef/knife'
 
 module KnifeCssh
+
+  def self.which(*cmds)
+    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+
+    cmds.each do |cmd|
+      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+        exts.each do |ext|
+          exe = File.join(path, "#{cmd}#{ext}")
+          return exe if File.executable?(exe) && !File.directory?(exe)
+        end
+      end
+    end
+
+    return nil
+  end
+
   class CsshSummon < Chef::Knife
 
     banner "knife cssh summon QUERY"
@@ -10,6 +26,13 @@ module KnifeCssh
       :long => '--login USER',
       :description => 'Username to use for login',
       :default => 'root'
+
+    option :cssh_command,
+      :short => '-c COMMAND',
+      :long => '--cssh-command COMMAND',
+      :description => 'Command to use instead of cssh/csshX',
+      :default => KnifeCssh::which('csshX', 'cssh'),
+      :proc => Proc.new { |cmd| KnifeCssh::which cmd }
 
     deps do
       require 'chef/node'
@@ -43,7 +66,7 @@ module KnifeCssh
         exit 1
       end
 
-      %x[cssh -l #{config[:login].shellescape} #{result_items.join(" ")}]
+      %x[#{config[:cssh_command]} -l #{config[:login].shellescape} #{result_items.join(" ")}]
     end
 
     private
