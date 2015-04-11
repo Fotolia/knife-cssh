@@ -33,7 +33,7 @@ module KnifeCssh
       :short => '-l USER',
       :long => '--login USER',
       :description => 'Username to use for login',
-      :default => 'root'
+      :default => ENV['USER']
 
     option :cssh_command,
       :short => '-c COMMAND',
