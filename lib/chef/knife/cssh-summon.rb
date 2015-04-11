@@ -34,6 +34,15 @@ module KnifeCssh
       :default => KnifeCssh::which('csshX', 'cssh'),
       :proc => Proc.new { |cmd| KnifeCssh::which cmd }
 
+    SPECIFIC_OPTIONS = {
+      'tmux-cssh' => {
+        :user_switch => '-u'
+      },
+      :default => {
+        :user_switch => '-l'
+      }
+    }
+
     deps do
       require 'chef/node'
       require 'chef/environment'
@@ -66,7 +75,7 @@ module KnifeCssh
         exit 1
       end
 
-      %x[#{config[:cssh_command]} -l #{config[:login].shellescape} #{result_items.join(" ")}]
+      call_cssh result_items
     end
 
     private
@@ -75,6 +84,23 @@ module KnifeCssh
       return item[:ec2][:public_ipv4] if item.has_key? :ec2
       return item[:ipaddress] if not item[:ipaddress].nil?
       item[:fqdn]
+    end
+
+    def call_cssh(hosts)
+      %x[#{config[:cssh_command]} #{get_impl_opt :user_switch} #{config[:login].shellescape} #{hosts.join(" ")}]
+    end
+
+    def get_impl_opt(key)
+      cmdname = cssh_command_name
+      if SPECIFIC_OPTIONS.has_key?(cmdname) and SPECIFIC_OPTIONS[cmdname].has_key?(key)
+        return SPECIFIC_OPTIONS[cmdname][key]
+      end
+
+      SPECIFIC_OPTIONS[:default][key]
+    end
+
+    def cssh_command_name
+      File.basename config[:cssh_command]
     end
   end
 end
