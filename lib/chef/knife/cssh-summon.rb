@@ -21,6 +21,12 @@ module KnifeCssh
 
     def run
       # this chef is mainly from chef own knife search command
+      if name_args.length < 1
+        puts 'Missing argument QUERY!'
+        show_usage
+        exit 1
+      end
+
       query = name_args[0]
       q = Chef::Search::Query.new
       escaped_query = URI.escape(query, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
