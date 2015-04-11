@@ -17,6 +17,14 @@ module KnifeCssh
     return nil
   end
 
+  def self.find_command(*cmds)
+    cmd = self.which *cmds
+    return cmd if not cmd.nil?
+
+    puts "Unable to find any of the commands: #{cmds.join ', '} on PATH!"
+    exit 1
+  end
+
   class CsshSummon < Chef::Knife
 
     banner "knife cssh summon QUERY"
@@ -31,8 +39,8 @@ module KnifeCssh
       :short => '-c COMMAND',
       :long => '--cssh-command COMMAND',
       :description => 'Command to use instead of cssh/csshX',
-      :default => KnifeCssh::which('csshX', 'cssh'),
-      :proc => Proc.new { |cmd| KnifeCssh::which cmd }
+      :default => KnifeCssh::find_command('csshX', 'cssh'),
+      :proc => Proc.new { |cmd| KnifeCssh::find_command(cmd) }
 
     SPECIFIC_OPTIONS = {
       'tmux-cssh' => {
