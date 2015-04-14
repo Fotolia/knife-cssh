@@ -21,8 +21,7 @@ module KnifeCssh
     cmd = self.which *cmds
     return cmd if not cmd.nil?
 
-    puts "Unable to find any of the commands: #{cmds.join ', '} on PATH!"
-    exit 1
+    nil
   end
 
   class CsshSummon < Chef::Knife
@@ -95,6 +94,11 @@ module KnifeCssh
     end
 
     def call_cssh(hosts)
+      if config[:cssh_command].nil?
+        puts "Unable to find any suitable cssh command on PATH!"
+        exit 1
+      end
+
       %x[#{config[:cssh_command]} #{get_impl_opt :user_switch} #{config[:login].shellescape} #{hosts.join(" ")}]
     end
 
