@@ -26,4 +26,4 @@ Nicolas Szalay : < nicolas.szalay _at_ fotolia _dot_ com >
 Contributors
 ------------
 
-Bence Kiglics : < bence.kiglics -at_ gmail _dot_ com >
+Bence Kiglics : < bence.kiglics _at_ gmail _dot_ com >
