@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
                     lib/knife-cssh.rb
                     lib/chef/knife/cssh-summon.rb
                   ]
-  s.homepage    = 'http://www.rottenbytes.info'
+  s.homepage    = 'https://github.com/Fotolia/knife-cssh'
 end
